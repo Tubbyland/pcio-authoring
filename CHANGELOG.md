@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-07 — play-test findings (You Cheated! v3)
+- Corrected `autoShuffle`: it does not shuffle cards an automation moves into a
+  holder. Added limitations §3 — end any add-to-deck routine with a Shuffle step.
+- Recorded Sam's in-app fix (Shuffle appended to "Next Round") and the confirmed
+  6→8→10 escalation in the You Cheated example.
+
 ## 2026-10-07 — initial
 - First reverse-engineered reference of the `.pcio` format and `widgets.json`
   schema (schemaVersion 8), from real exports plus playingcards.io docs.

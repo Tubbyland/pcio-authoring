@@ -48,8 +48,8 @@ Optional common fields: `width`, `height` (omit to use the type's default size),
 - The table is a large plane; observed tables span roughly `x: 0–1530`,
   `y: 36–900`. Place new widgets in open bands and nudge in-app afterward.
 - Cards inside a holder are laid out by the holder, so exact `x/y` on a held card
-  matters little — especially for a deck with `autoShuffle`, which re-stacks on
-  recall/shuffle.
+  matters little. Stack **order**, however, is not randomised for you — see the
+  `autoShuffle` note below.
 
 ## 3. Widget types
 
@@ -67,7 +67,7 @@ belongs to via its `deck` field.
 | `cardTypes` | Dict `cardTypeKey -> {label, image}`. For the standard deck, keys look like `spades-a`, `hearts-10`, plus `joker-black/red/blue`. Custom decks use keys like `type-<uuid>` with `image` pointing at `/img/...` or a `userassets/...` file. |
 | `cardWidth`, `cardHeight` | Card size. |
 | `faceTemplate`, `backTemplate` | Rendering templates (layers). |
-| `autoShuffle` | If true, the collection auto-shuffles when gathered. |
+| `autoShuffle` | Collection-level shuffle setting. **Tested: it does NOT shuffle cards that an automation moves into a holder** — moved cards land on top and stay there. Add an explicit shuffle step after any move into a draw deck. |
 | `showUnflipped`, `hasShuffleButton`, `mainBorderRadius`, `collectionType` | Display/behaviour options. |
 
 A collection's cards can far outnumber its `cardTypes` (duplicates via multi-deck).

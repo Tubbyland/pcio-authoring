@@ -58,6 +58,15 @@ life collection (3 each); each chip is a piece in a per-player chip collection
   lost lives are never dealt as cards).
 - Set the pot's `allowedDecks` to null so a life token can enter it.
 
+**v3 play-test fix (made in-app by Sam)**
+- "Next Round" now ends with a **Shuffle** step on the deck. Without it, the 2 Cheats
+  added each round landed on top of the deck and stayed there (auto-shuffle does not
+  cover moved cards). The exact JSON for this step is pending capture from an export.
+- Play-test confirmed the escalation curve: Round 3 showed deck 62 (52 + 10 Cheats),
+  reserve 10.
+- Layout: P2/P3 "Bet a Life"/"Lose a Life" buttons overlap the bottom hand dock;
+  nudge in Edit Mode.
+
 ## Not automatable (and why)
 
 - **"Most Cheats loses a life"** — needs counting + comparison across hands. The
