@@ -38,6 +38,15 @@ setting does not mix them in. Any routine that adds or returns cards to a draw d
 must **end with an explicit Shuffle step** on that deck, or the added cards will be
 dealt first.
 
+## 3a. `autoShuffle` scrambles cards across holders at import
+
+Confirmed from playingcards.io's importer code and the Worlds Apart test (Nov 2026):
+when a collection has `autoShuffle: true`, importing the room reassigns card types
+randomly across **every** card of that collection, wherever it was placed. Cards set
+up in separate piles (terrain decks, a starting card on the table, three kinds of
+token card) end up mixed. Use `autoShuffle: false` and shuffle in the build script,
+or give each pile its own collection.
+
 ## 4. Recall / move destinations matter — don't shuffle stray cards into the deck
 
 If a "Next Round" routine recalls a holder (e.g. a discard) back into the draw deck,

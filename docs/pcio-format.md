@@ -67,7 +67,7 @@ belongs to via its `deck` field.
 | `cardTypes` | Dict `cardTypeKey -> {label, image}`. For the standard deck, keys look like `spades-a`, `hearts-10`, plus `joker-black/red/blue`. Custom decks use keys like `type-<uuid>` with `image` pointing at `/img/...` or a `userassets/...` file. |
 | `cardWidth`, `cardHeight` | Card size. |
 | `faceTemplate`, `backTemplate` | Rendering templates (layers). |
-| `autoShuffle` | Collection-level shuffle setting. **Tested: it does NOT shuffle cards that an automation moves into a holder** — moved cards land on top and stay there. Add an explicit shuffle step after any move into a draw deck. |
+| `autoShuffle` | Collection-level shuffle setting. **Tested: it does NOT shuffle cards that an automation moves into a holder** — moved cards land on top and stay there. Add an explicit shuffle step after any move into a draw deck. **Confirmed (importer code and Worlds Apart test, Nov 2026): on import, `true` reassigns `cardType` randomly across every card of the collection, in every holder** — it ignores which holder a card was placed in. Set it to `false` for any collection whose cards start in more than one place, and shuffle in your build script instead. |
 | `showUnflipped`, `hasShuffleButton`, `mainBorderRadius`, `collectionType` | Display/behaviour options. |
 
 A collection's cards can far outnumber its `cardTypes` (duplicates via multi-deck).
@@ -86,6 +86,8 @@ A collection's cards can far outnumber its `cardTypes` (duplicates via multi-dec
 ### 3.3 `piece` — tokens (e.g. chips)
 Like a card but typically no `faceup`. Has `deck` (the piece collection, e.g.
 `"P1 Chips"`), `cardType` (e.g. `"white"`), `parent`, `x/y/z`, optional `label`.
+**Confirmed:** a `cardDeck` with `"collectionType": "pieces"` can use custom
+`package://userassets/*.svg` images as its token faces.
 
 ### 3.4 `holder`
 A container that organises objects and is the target/source of most automations.
@@ -98,7 +100,8 @@ A container that organises objects and is the target/source of most automations.
 | `layoutType` | `Pile` (stack), `Spread`, `Grid`, or `Freeform`. |
 | `hideStackTab` | Hide the count tab. |
 | `enableChildrenSnapToSimilar` | Freeform snapping. |
-| `mainBackground`, `mainOutlines`, `mainTextStyle` | Styling (optional). |
+| `mainBackground`, `mainOutlines`, `mainTextStyle` | Styling (optional). **Confirmed:** `"mainBackground": {"fill": {"type": "color", "color": "rgb(251,231,212)"}}` tints the holder. |
+| `hasShuffleButton` | Shows a **Recall & Shuffle** button. Recall most likely gathers every card of the holder's collection from the whole table (not import-tested), so avoid it on piles whose collection is also used elsewhere. |
 
 ### 3.5 `seat` (Player Seat)
 | Field | Meaning |
@@ -120,6 +123,7 @@ in place; don't rebuild its contents from tool output.
 | Field | Meaning |
 |-------|---------|
 | `label`, `counterValue`, `counterMin`, `counterMax`, `owner` | Self-explanatory; value is clamped to min/max. |
+| `width`, `height` | **Confirmed** to size the counter (e.g. 88 × 58). |
 
 ### 3.8 `automationButton`
 See `automation-reference.md`. Key fields: `label`, `clickRoutine`, `x/y/z`,

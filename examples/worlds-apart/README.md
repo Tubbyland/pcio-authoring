@@ -48,8 +48,8 @@ Table about 1600 × 1000.
   Events with an in-play area and a Caravan AP counter; Relic; Council Cards and
   discard; Hunger, Malaise, Injury (10 each); Items and discard.
 - **Counters**: Food 20, Population 20, Supplies 20, Round 1.
-- **Dice as decks**: Plains die, Forest die, Mountains die and d10 are 10-card
-  decks. Shuffle, flip the top card, return it. The Plains die has the 7 faces from
+- **Dice as decks**: Plains, Forest, Mountains and d10 are 10-card decks. Press
+  Recall & Shuffle, then flip the top card. The Plains die has the 7 faces from
   the bible plus 3 blank ones; Forest and Mountains faces are all blank. Draw two
   from the d10 for a Relic roll.
 - **Hand dock** (bottom): each player's private hand on their own screen.
@@ -58,11 +58,14 @@ Everything is manual. There are no automation buttons.
 
 ## Status
 
-- **Not import-tested yet.** Card faces (`package://userassets/*.svg`), built-in
-  card backs and counters follow patterns confirmed in the You Cheated! room.
-  **Unverified**: coloured holder backgrounds (`mainBackground`), custom-image
-  pieces (`collectionType: "pieces"` with userassets images), and `width`/`height`
-  on counters. Check these on the first import and update this file.
+- **Import-tested 27 Nov 2026.** Card faces, coloured holder backgrounds, custom
+  token images and counter sizes all display correctly.
+- `autoShuffle` is **off** on every collection. With it on, the importer shuffled
+  card types across piles (Forest Places in the Plains pile, Hunger cards showing
+  Malaise, the starting Camp replaced). The builder shuffles each pile itself.
+- Each pile is its own collection, and only the dice have a Recall & Shuffle
+  button, so recalling one pile can't pull cards off the table or out of hands.
+  To shuffle any other pile, use its stack menu (click the count tab).
 - Players sharing one device share one hand dock, so their hands mix.
 - Mountain Pass (P03) is shuffled into the Mountains deck; its placement is an
   open design question.
