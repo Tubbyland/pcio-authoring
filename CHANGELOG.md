@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-22 — Worlds Apart room
+- Added `examples/worlds-apart/`: a room built from scratch by script (card faces
+  drawn as SVGs from `cards.json`), the packed `.pcio`, and a layout mock.
+- Not import-tested yet. New, unverified patterns: holder `mainBackground`,
+  custom-image pieces, counter `width`/`height`. Listed in the example README.
+
 ## 2026-10-07 — play-test findings (You Cheated! v3)
 - Corrected `autoShuffle`: it does not shuffle cards an automation moves into a
   holder. Added limitations §3 — end any add-to-deck routine with a Shuffle step.

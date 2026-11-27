@@ -25,6 +25,7 @@ reliably than dragging in the editor. You then re-import the file into a fresh r
 | `tools/pcio_unpack.py` | Unpack a `.pcio` into a directory and pretty-print `widgets.json`. |
 | `tools/pcio_pack.py` | Repack a directory into a valid `.pcio` (correct ZIP structure). |
 | `examples/you-cheated/MAPPING.md` | Worked example: the You Cheated! table — widget IDs, mechanics, and what was changed. |
+| `examples/worlds-apart/` | Generated example: the Worlds Apart playtest table, built from scratch by `build_room.py` from card data. |
 
 ## Core workflow
 
