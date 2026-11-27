@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-27 — Worlds Apart import test
+- Imported the Worlds Apart room. Confirmed: holder `mainBackground`, custom-image
+  pieces, counter `width`/`height`, many custom card types in one collection.
+- Found from the importer code: `autoShuffle: true` reassigns card types across every
+  card of a collection at import, ignoring holders. Added limitations §3a and a note
+  in the format reference. Worlds Apart builder now sets it to false.
+- Worlds Apart room: one collection per pile, Recall & Shuffle only on the dice,
+  label spacing fixed.
+
 ## 2026-11-22 — Worlds Apart room
 - Added `examples/worlds-apart/`: a room built from scratch by script (card faces
   drawn as SVGs from `cards.json`), the packed `.pcio`, and a layout mock.
