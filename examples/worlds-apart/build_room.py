@@ -279,7 +279,7 @@ def deck(name, w, h, home, pieces=False):
         d["collectionType"] = "pieces"
     else:
         b = json.loads(json.dumps(BACK)); b["objects"][0]["w"] = w; b["objects"][0]["h"] = h
-        d["backTemplate"] = b; d["autoShuffle"] = True
+        d["backTemplate"] = b; d["autoShuffle"] = False  # True makes PCIO shuffle card types across ALL holders of the deck at import
     W.append(d); return d
 
 def ctype(dk, label, svg_text):
@@ -318,23 +318,23 @@ for i in range(3):
     x = 8 + i * 206
     slots.append(holder(f"Path {i+1}", x, Y3, PW + 8, PH + 30, free=True, bg="rgb(240,232,214)"))
     counter("Progress", x + PW + 14, Y3 + 30, 0, 0, 10, w=72)
-counter("Sequence", 626, Y3 + 8, 0, 0, 4, w=84)
-seqh = holder("Sequence role", 716, Y3, 84, 96, free=True)
-floodh = holder("Flood tokens", 626, Y3 + 108, 84, 100, free=True, bg="rgb(214,230,241)")
-timeh = holder("Timing tokens", 716, Y3 + 108, 84, 100, free=True)
+counter("Sequence", 632, Y3 + 30, 0, 0, 4, w=80)
+seqh = holder("Role", 718, Y3 + 8, 84, 96, free=True)
+floodh = holder("Flood", 632, Y3 + 116, 80, 100, free=True, bg="rgb(214,230,241)")
+timeh = holder("Timing", 718, Y3 + 116, 84, 100, free=True)
 holder("Pending Events  ·  Timing tokens on cards", 810, Y3, 298, PH + 30, free=True)
 edecks = {}
 for i, t in enumerate(["Plains", "Forest", "Mountains"]):
-    edecks[t] = holder(f"{t} Events", 1116 + i * 121, Y3 + 22, EW + 8, EH + 8, shuffle=True)
-edisc = holder("Event discard", 1116 + 3 * 121, Y3 + 22, EW + 8, EH + 8)
+    edecks[t] = holder(f"{t} Events", 1116 + i * 121, Y3 + 40, EW + 8, EH + 8, shuffle=True)
+edisc = holder("Event discard", 1116 + 3 * 121, Y3 + 40, EW + 8, EH + 8)
 
 # ---- Row 4: Flood Track, Caravan, Relic
 Y4 = Y3 + PH + 30 + 12
 flood = holder("Flood Track  ·  Places reached", 8, Y4, 1100, PH + 30, free=True, bg="rgb(214,230,241)")
-cdeck = holder("Caravan Events", 1116, Y4 + 22, EW + 8, EH + 8, shuffle=True)
+cdeck = holder("Caravan Events", 1116, Y4 + 40, EW + 8, EH + 8, shuffle=True)
 holder("Caravan Events in play", 1232, Y4, 236, PH + 30, free=True)
 counter("Caravan AP", 1240, Y4 + PH - 36, 0, 0, 60, w=96)
-holder("Relic", 1478, Y4 + 22, EW + 8, EH + 8)
+holder("Relic", 1478, Y4 + 40, EW + 8, EH + 8)
 
 # ---- Row 5: CC, Disruption, hand, Items, resources, dice
 Y5 = Y4 + PH + 30 + 12
@@ -352,7 +352,7 @@ counter("Supplies", 1312, Y5 + 10, 20, 0, 99)
 counter("Round", 1124, Y5 + 80, 1, 1, 30)
 dice = {}
 for i, t in enumerate(["Plains die", "Forest die", "Mountains die", "d10"]):
-    dice[t] = holder(t, 1410 + (i % 3) * 64 if i < 3 else 1218, Y5 + 22 if i < 3 else Y5 + 100, DW + 8, DH + 8, shuffle=True)
+    dice[t] = holder(t.replace(" die", ""), 1410 + (i % 3) * 64 if i < 3 else 1218, Y5 + 22 if i < 3 else Y5 + 100, DW + 8, DH + 8, shuffle=True)
 
 # ---------------- populate ----------------
 def shuffled(xs):
