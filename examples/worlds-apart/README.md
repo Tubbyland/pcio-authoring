@@ -9,7 +9,7 @@ scratch by a script, so it can be rebuilt whenever the card sheets change.
 | `cards.json` | Card data, copied from the Google Drive card sheets (WA - PLACES v2, TERRAIN EVENTS v2, CARAVAN EVENTS v2, ITEMS v2, COUNCIL CARDS v2). |
 | `build_room.py` | Draws every card face as an SVG and lays out the table. Stdlib only. |
 | `worlds-apart-room.pcio` | The built room, ready to import. |
-| `layout-mock.png` | A browser mock of the layout. The real room will differ a little. |
+| `layout.jpg` | Screenshot of the imported room (27 Nov 2026). |
 
 ## Rebuild after card changes
 
