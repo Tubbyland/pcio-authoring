@@ -30,19 +30,20 @@ Every build shuffles the decks and gives the room fresh widget IDs.
 
 ## Layout
 
-Table about 1600 × 1000.
+Table 1600 × 1000. Spacing rules (label and counter sizes measured in the live room) are at the top of the layout section in `build_room.py`.
 
 - **Role panels** (top): Pathfinder, Marshal, Elder, Caretaker. Each has a score
-  track counter (0–10, starts at 5), AP and VP. The space on the right is for that
-  role's face-up Items.
-- **The Horizon**: open area for revealed Places.
+  track counter (0–10, starts at 5) and an AP counter. The space on the right is
+  for that role's face-up Items and VP tokens (counters are too wide for a third
+  one in the panel).
+- **The Horizon**: open area for revealed Places, with **Pending Events** beside it
+  (put Timing tokens on the cards).
 - **The Path**: three fixed slots (the three-Place window), each with its own
   Progress counter. Tokens don't follow cards in PCIO, so counters avoid stray
   Progress tokens when a Place moves on.
 - **Sequence** counter (0–4) and a holder of four role tokens to mark whose
   sequence is running.
-- **Flood** and **Timing** token supplies.
-- **Pending Events**: open area; put Timing tokens on the cards.
+- **Flood**, **Timing** and **VP** token supplies.
 - **Flood Track**: open area for reached Places. The starting Camp (P21) begins here.
 - **Decks**: Places and Terrain Events by terrain, each with a discard; Caravan
   Events with an in-play area and a Caravan AP counter; Relic; Council Cards and
