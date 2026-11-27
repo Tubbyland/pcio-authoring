@@ -9,7 +9,7 @@ scratch by a script, so it can be rebuilt whenever the card sheets change.
 | `cards.json` | Card data, copied from the Google Drive card sheets (WA - PLACES v2, TERRAIN EVENTS v2, CARAVAN EVENTS v2, ITEMS v2, COUNCIL CARDS v2). |
 | `build_room.py` | Draws every card face as an SVG and lays out the table. Stdlib only. |
 | `worlds-apart-room.pcio` | The built room, ready to import. |
-| `layout-mock.png` | A browser mock of the layout. The real room will differ a little. |
+| `layout.jpg` | Screenshot of the imported room (27 Nov 2026). |
 
 ## Rebuild after card changes
 
@@ -30,19 +30,20 @@ Every build shuffles the decks and gives the room fresh widget IDs.
 
 ## Layout
 
-Table about 1600 × 1000.
+Table 1600 × 1000. Spacing rules (label and counter sizes measured in the live room) are at the top of the layout section in `build_room.py`.
 
 - **Role panels** (top): Pathfinder, Marshal, Elder, Caretaker. Each has a score
-  track counter (0–10, starts at 5), AP and VP. The space on the right is for that
-  role's face-up Items.
-- **The Horizon**: open area for revealed Places.
+  track counter (0–10, starts at 5) and an AP counter. The space on the right is
+  for that role's face-up Items and VP tokens (counters are too wide for a third
+  one in the panel).
+- **The Horizon**: open area for revealed Places, with **Pending Events** beside it
+  (put Timing tokens on the cards).
 - **The Path**: three fixed slots (the three-Place window), each with its own
   Progress counter. Tokens don't follow cards in PCIO, so counters avoid stray
   Progress tokens when a Place moves on.
 - **Sequence** counter (0–4) and a holder of four role tokens to mark whose
   sequence is running.
-- **Flood** and **Timing** token supplies.
-- **Pending Events**: open area; put Timing tokens on the cards.
+- **Flood**, **Timing** and **VP** token supplies.
 - **Flood Track**: open area for reached Places. The starting Camp (P21) begins here.
 - **Decks**: Places and Terrain Events by terrain, each with a discard; Caravan
   Events with an in-play area and a Caravan AP counter; Relic; Council Cards and

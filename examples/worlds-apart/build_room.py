@@ -10,6 +10,7 @@ random.seed()
 SRC, OUT = sys.argv[1], sys.argv[2]
 D = json.load(open(SRC))
 ROOM = os.path.join(OUT, "room")
+import shutil; shutil.rmtree(ROOM, ignore_errors=True)  # stale assets from an earlier build would be packed too
 os.makedirs(os.path.join(ROOM, "userassets"), exist_ok=True)
 
 FONT = "Arial, Helvetica, sans-serif"
@@ -294,65 +295,72 @@ def put(dk, key, hold, faceup=False, piece=False, dx=4, dy=4):
         o["faceup"] = faceup
     W.append(o); return o
 
-# ---- Row 1: role panels
-Y1 = 8
+# Spacing rules measured in the live room (27 Nov 2026):
+# - A holder's label is drawn ABOVE its top edge and takes ~29 px, so leave GAP above
+#   every holder and put nothing just above a labelled holder.
+# - A counter draws ~140 x 44 px whatever width is set, with its label ~27 px above.
+# - A Recall & Shuffle button hangs ~26 px below its holder.
+GAP = 30
+CW_ = 140         # counter footprint width
+CP = 146          # counter pitch
+ROW = PH + 12     # height of the Horizon / Path / Flood Track rows
+
+# ---- Row 1: role panels (track + AP counters; VP tokens and Items go on the right)
+Y1 = GAP
 for i, r in enumerate(ROLES):
     x = 8 + i * 398
-    p = holder(f"{r}  ·  {TRACK[r]}", x, Y1, 390, 128, free=True, bg=ROLE_TINT[r])
-    counter(TRACK[r], x + 8, Y1 + 30, 5, 0, 10)
-    counter("AP", x + 102, Y1 + 30, 0, 0, 99)
-    counter("VP", x + 196, Y1 + 30, 0, 0, 20)
+    holder(f"{r}  ·  {TRACK[r]}  ·  Items & VP", x, Y1, 390, 108, free=True, bg=ROLE_TINT[r])
+    counter(TRACK[r], x + 8, Y1 + 34, 5, 0, 10, w=CW_)
+    counter("AP", x + 8 + CP, Y1 + 34, 0, 0, 99, w=CW_)
 
-# ---- Row 2: Horizon + Place decks
-Y2 = Y1 + 128 + 12
-holder("The Horizon  ·  revealed Places", 8, Y2, 1100, PH + 30, free=True, bg="rgb(236,236,230)")
+# ---- Row 2: Horizon, Pending Events, Place decks
+Y2 = Y1 + 108 + GAP
+holder("The Horizon  ·  revealed Places", 8, Y2, 872, ROW, free=True, bg="rgb(236,236,230)")
+holder("Pending Events", 888, Y2, 220, ROW, free=True)
 pdecks = {}
 for i, t in enumerate(["Plains", "Forest", "Mountains"]):
-    pdecks[t] = holder(f"{t} Places", 1116 + i * 121, Y2 + 22, PW + 8, PH + 8)
-pdisc = holder("Place discard", 1116 + 3 * 121, Y2 + 22, PW + 8, PH + 8)
+    pdecks[t] = holder(f"{t} Places", 1116 + i * 121, Y2, PW + 8, PH + 8)
+pdisc = holder("Place discard", 1116 + 3 * 121, Y2, PW + 8, PH + 8)
 
-# ---- Row 3: Path slots, tokens, pending events, event decks
-Y3 = Y2 + PH + 30 + 12
-slots = []
+# ---- Row 3: Path slots with Progress counters, Sequence, token supplies, Event decks
+Y3 = Y2 + ROW + GAP
 for i in range(3):
-    x = 8 + i * 206
-    slots.append(holder(f"Path {i+1}", x, Y3, PW + 8, PH + 30, free=True, bg="rgb(240,232,214)"))
-    counter("Progress", x + PW + 14, Y3 + 30, 0, 0, 10, w=72)
-counter("Sequence", 632, Y3 + 30, 0, 0, 4, w=80)
-seqh = holder("Role", 718, Y3 + 8, 84, 96, free=True)
-floodh = holder("Flood", 632, Y3 + 116, 80, 100, free=True, bg="rgb(214,230,241)")
-timeh = holder("Timing", 718, Y3 + 116, 84, 100, free=True)
-holder("Pending Events  ·  Timing tokens on cards", 810, Y3, 298, PH + 30, free=True)
+    x = 8 + i * 278
+    holder(f"Path {i+1}", x, Y3, PW + 8, ROW, free=True, bg="rgb(240,232,214)")
+    counter("Progress", x + PW + 22, Y3 + 34, 0, 0, 10, w=CW_)
+counter("Sequence", 842, Y3 + 4, 0, 0, 4, w=CW_)
+seqh = holder("Role", 1000, Y3, 90, 80, free=True)
+floodh = holder("Flood", 842, Y3 + 112, 82, 86, free=True, bg="rgb(214,230,241)")
+timeh = holder("Timing", 930, Y3 + 112, 82, 86, free=True)
+vph = holder("VP", 1018, Y3 + 112, 90, 86, free=True, bg="rgb(246,237,196)")
 edecks = {}
 for i, t in enumerate(["Plains", "Forest", "Mountains"]):
-    edecks[t] = holder(f"{t} Events", 1116 + i * 121, Y3 + 40, EW + 8, EH + 8)
-edisc = holder("Event discard", 1116 + 3 * 121, Y3 + 40, EW + 8, EH + 8)
+    edecks[t] = holder(f"{t} Events", 1116 + i * 121, Y3 + 28, EW + 8, EH + 8)
+edisc = holder("Event discard", 1116 + 3 * 121, Y3 + 28, EW + 8, EH + 8)
 
 # ---- Row 4: Flood Track, Caravan, Relic
-Y4 = Y3 + PH + 30 + 12
-flood = holder("Flood Track  ·  Places reached", 8, Y4, 1100, PH + 30, free=True, bg="rgb(214,230,241)")
-cdeck = holder("Caravan Events", 1116, Y4 + 40, EW + 8, EH + 8)
-holder("Caravan Events in play", 1232, Y4, 236, PH + 30, free=True)
-counter("Caravan AP", 1240, Y4 + PH - 36, 0, 0, 60, w=96)
-holder("Relic", 1478, Y4 + 40, EW + 8, EH + 8)
+Y4 = Y3 + ROW + GAP
+flood = holder("Flood Track  ·  Places reached", 8, Y4, 1100, ROW, free=True, bg="rgb(214,230,241)")
+cdeck = holder("Caravan Events", 1116, Y4 + 28, EW + 8, EH + 8)
+holder("Caravan Events in play", 1232, Y4, 240, ROW, free=True)
+counter("Caravan AP", 1282, Y4 + ROW - 52, 0, 0, 60, w=CW_)
+holder("Relic", 1480, Y4 + 28, EW + 8, EH + 8)
 
-# ---- Row 5: CC, Disruption, hand, Items, resources, dice
-Y5 = Y4 + PH + 30 + 12
-ccdeck = holder("Council Cards", 8, Y5 + 22, CW + 8, CH + 8)
-ccdisc = holder("CC discard", 98, Y5 + 22, CW + 8, CH + 8)
+# ---- Row 5: Council Cards, Disruption, hand, Items, counters, dice
+Y5 = Y4 + ROW + GAP
+ccdeck = holder("Council", 8, Y5, CW + 8, CH + 8)
+ccdisc = holder("CC discard", 90, Y5, CW + 8, CH + 8)
 dish = {}
 for i, t in enumerate(["Hunger", "Malaise", "Injury"]):
-    dish[t] = holder(t, 188 + i * 90, Y5 + 22, CW + 8, CH + 8)
-W.append({"id": "hand", "type": "hand", "x": 470, "y": Y5, "z": 1, "dragging": None, "width": 470, "height": 172})
-ideck = holder("Items", 952, Y5 + 22, IW + 8, IH + 8)
-idisc = holder("Discard", 1036, Y5 + 22, IW + 8, IH + 8)
-counter("Food", 1124, Y5 + 10, 20, 0, 99)
-counter("Population", 1218, Y5 + 10, 20, 0, 40)
-counter("Supplies", 1312, Y5 + 10, 20, 0, 99)
-counter("Round", 1124, Y5 + 80, 1, 1, 30)
+    dish[t] = holder(t, 172 + i * 82, Y5, CW + 8, CH + 8)
+W.append({"id": "hand", "type": "hand", "x": 418, "y": Y5, "z": 1, "dragging": None, "width": 420, "height": 1000 - Y5 - 4})
+ideck = holder("Items", 848, Y5, IW + 8, IH + 8)
+idisc = holder("Discard", 934, Y5, IW + 8, IH + 8)
+for j, (lab, val, lo, hi) in enumerate((("Food", 20, 0, 99), ("Population", 20, 0, 40), ("Supplies", 20, 0, 99), ("Round", 1, 1, 30))):
+    counter(lab, 1024 + (j % 2) * CP, Y5 + (j // 2) * 76, val, lo, hi, w=CW_)
 dice = {}
 for i, t in enumerate(["Plains die", "Forest die", "Mountains die", "d10"]):
-    dice[t] = holder(t.replace(" die", ""), 1404 + (i % 3) * 66 if i < 3 else 1218, Y5 + 22 if i < 3 else Y5 + 100, DW + 8, DH + 8, shuffle=True)
+    dice[t] = holder(t.replace(" die", ""), 1318 + i * 72, Y5, DW + 8, DH + 8, shuffle=True)
 
 # ---------------- populate ----------------
 def shuffled(xs):
@@ -366,7 +374,7 @@ for r in shuffled(D["places"]):
     terr = c["terrain"] if c["terrain"] in pdecks else "Plains"
     key = ctype(placeD[terr], f"{r[0]} {title}", svg)
     if r[0] == "P21":
-        put(placeD[terr], key, flood, faceup=True, dx=10, dy=24)
+        put(placeD[terr], key, flood, faceup=True, dx=10, dy=6)
         continue
     put(placeD[terr], key, pdecks[terr])
 
@@ -419,6 +427,11 @@ seqD = deck("Sequence role", 30, 30, seqh, pieces=True)
 for i, r in enumerate(ROLES):
     k = ctype(seqD, r, token_svg(ROLE_COL[r], r[0], size=30))
     put(seqD, k, seqh, piece=True, dx=6 + (i % 2) * 38, dy=24 + (i // 2) * 34)
+
+vpD = deck("VP tokens", TW, TW, vph, pieces=True)
+vk = ctype(vpD, "VP", token_svg("#c99a00", "VP", "#1b2329"))
+for i in range(30):
+    put(vpD, vk, vph, piece=True, dx=10 + (i % 4) * 4, dy=24 + (i // 4) * 2)
 
 # counters on top of everything
 for w in W:
